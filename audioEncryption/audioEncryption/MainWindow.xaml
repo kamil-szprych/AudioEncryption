@@ -8,6 +8,7 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <DockPanel>
+            <Button DockPanel.Dock="Top" Content="Pomoc" Width="80" HorizontalAlignment="Right" Margin="5" Click="Button_Click"/>
             <StackPanel DockPanel.Dock="Bottom">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock Text="Status: "/>
@@ -20,7 +21,7 @@
                     <Button x:Name="SaveAsButton" Content="Zapisz jako..." Margin="10 0" Padding="5 2" Click="SaveAsButton_Click"/>
                 </StackPanel>
             </StackPanel>
-            <Grid Margin="20">
+            <Grid Margin="20 0 20 10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"></ColumnDefinition>
                     <ColumnDefinition Width="2*"></ColumnDefinition>

@@ -266,5 +266,23 @@ namespace AudioEncryption
             string message = "Klucze zostały zapisane pod nazwami:\n\n" + privateKeyName + "\n" + publicKeyName;
             MessageBox.Show(message, "Zapisano", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            StringWriter help = new StringWriter();
+            help.WriteLine("Instrukcja: \n");
+            help.WriteLine("1. Wybierz plik wav klikając na przycisk oznaczony \"*\". ");
+            help.WriteLine("2. Po wybraniu pliku naciśnij przycisk \"Załaduj\". ");
+            help.WriteLine("3. Po prawej wyświetlą się dane pliku.");
+            help.WriteLine("4a. Wczytaj klucz prywatny i/lub publiczny.");
+            help.WriteLine("4b. Możesz też wygenerować nową parę kluczy przyciskiem \"Generuj parę kluczy\". ");
+            help.WriteLine("5. Wybierz porządaną operację przyciskami \"Zaszyfruj\" lub \"Odszyfruj\". ");
+            help.WriteLine("6. Zapisz plik wynikowy przyciskiem \"Zapisz jako...\". Zmiany nie zostaną zachowane jeśli nie zapiszesz pliku.");
+            help.WriteLine("7. Jeśli zaszyfrowałeś plik nowym kluczem warto jest zapisać odpowiedni klucz przyciskiem lub szybciej oba jednocześnie wpisując swój dopisek i zapisując przyciskiem \"Zapisz oba klucze\". ");
+            help.WriteLine("\n\n Odszyfrowywać można jedynie pliki zaszyfrowane za pomocą tego programu!");
+
+            string message = help.ToString();
+            MessageBox.Show(message, "Pomoc", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }
