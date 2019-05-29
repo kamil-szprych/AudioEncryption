@@ -4,4 +4,4 @@ Pozwala odszyfrować jedynie pliki zaszyfrowane za pomocą tego programu ze wzgl
 Ze względnu na drugorzędne znaczenie interfejsu program ma prosty, przejrzysty wygląd.
 
 Screenshot programu:
-![Example screenshot]()
+![Example screenshot](https://github.com/kamil-szprych/AudioEncryption/blob/master/Example.png)
