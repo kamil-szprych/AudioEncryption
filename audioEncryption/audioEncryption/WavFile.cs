@@ -106,7 +106,7 @@ namespace AudioEncryption
                 writer.Write(Subchunk1Size);
                 writer.Write(AudioFormat);
                 writer.Write(NumChannels);
-                writer.Write(SampleRate/2);
+                writer.Write(SampleRate);
                 writer.Write(ByteRate);
                 writer.Write(BlockAlign);
                 writer.Write(BitsPerSample);
