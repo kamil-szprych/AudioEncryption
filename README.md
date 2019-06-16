@@ -5,3 +5,7 @@ Ze względnu na drugorzędne znaczenie interfejsu program ma prosty, przejrzysty
 
 Screenshot programu:
 ![Example screenshot](https://github.com/kamil-szprych/AudioEncryption/blob/master/Example.png)
+
+
+Gif pokazujący działanie programu:
+![Example animation](https://github.com/kamil-szprych/AudioEncryption/blob/master/ExampleAnimation.gif)
