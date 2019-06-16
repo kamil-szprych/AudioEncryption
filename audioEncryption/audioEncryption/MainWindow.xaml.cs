@@ -201,9 +201,29 @@ namespace AudioEncryption
 
         private void GenerateKeyParButton_Click(object sender, RoutedEventArgs e)
         {
-            RsaManager.generateKeyPar();
-            PrivateKeyTextBlock.Text = RsaManager.GetKeyString(true);
-            PublicKeyTextBlock.Text = RsaManager.GetKeyString(false);
+            PrivateKeyLoadingImage.Visibility = Visibility.Visible;
+            PublicKeyLoadingImage.Visibility = Visibility.Visible;
+            PrivateKeyTextBlock.Text = "";
+            PublicKeyTextBlock.Text = "";
+            Task.Run(() =>
+            {
+                RsaManager.GenerateKeyPar();
+                this.Dispatcher.Invoke(() =>
+                {
+                    PrivateKeyLoadingImage.Visibility = Visibility.Collapsed;
+                    PublicKeyLoadingImage.Visibility = Visibility.Collapsed;
+                    PrivateKeyTextBlock.Text = RsaManager.GetKeyString(true);
+                    PublicKeyTextBlock.Text = RsaManager.GetKeyString(false);
+                });
+
+            });
+            //Task task = Task.Run((Action)RsaManager.generateKeyPar);
+            //task.ContinueWith((t) =>
+            //{
+            //    PrivateKeyTextBlock.Text = RsaManager.GetKeyString(true);
+            //    PublicKeyTextBlock.Text = RsaManager.GetKeyString(false);
+            //});
+
         }
 
         private void LoadPrivateKeyButton_Click(object sender, RoutedEventArgs e)
@@ -283,6 +303,15 @@ namespace AudioEncryption
 
             string message = help.ToString();
             MessageBox.Show(message, "Pomoc", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void XORButton_Click(object sender, RoutedEventArgs e)
+        {
+            var key = XORKeyTextBox.Text;
+            if (data.Xor(key))
+                MessageBox.Show("Plik został poddany operacji XOR z zadanym kluczem!", "Gotowe", MessageBoxButton.OK, MessageBoxImage.Information);
+            else
+                MessageBox.Show("Prawdopodobnie nie podano klucza XOR lub nie załadowano pliku", "Coś poszło nie tak :(", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

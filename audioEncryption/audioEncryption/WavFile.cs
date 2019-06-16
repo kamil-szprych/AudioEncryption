@@ -46,7 +46,7 @@ namespace AudioEncryption
             }
         }
 
-        
+
 
         public object[] GetObjectArray()
         {
@@ -106,7 +106,7 @@ namespace AudioEncryption
                 writer.Write(Subchunk1Size);
                 writer.Write(AudioFormat);
                 writer.Write(NumChannels);
-                writer.Write(SampleRate);
+                writer.Write(SampleRate/2);
                 writer.Write(ByteRate);
                 writer.Write(BlockAlign);
                 writer.Write(BitsPerSample);
@@ -146,9 +146,9 @@ namespace AudioEncryption
         }
 
         /// <summary>
-        /// Encrypts wav data using public key set in RsaManager static class. Returns true if successful otherwise false.
+        /// Encrypts wav data using public key set in RsaManager static class. Returns true if successful.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True if successful otherwise false</returns>
         public bool Encrypt()
         {
             if (Status == WavFileState.Encrypted || Status == WavFileState.Empty)
@@ -157,8 +157,10 @@ namespace AudioEncryption
             using (AesCryptoServiceProvider aes = new AesCryptoServiceProvider())
             {
                 var encryptor = aes.CreateEncryptor();
+                //Encrypt data
                 Data = encryptor.TransformFinalBlock(Data, 0, Data.Length);
 
+                //Save both AES key parts to one array
                 byte[] mergedKeyAndIV = new byte[aes.Key.Length + aes.IV.Length];
                 Array.Copy(aes.Key, mergedKeyAndIV, aes.Key.Length);
                 Array.Copy(aes.IV, 0, mergedKeyAndIV, aes.Key.Length, aes.IV.Length);
@@ -168,6 +170,7 @@ namespace AudioEncryption
                 if (encryptedKeyAndIV == null)
                     return false;
 
+                //Add encrypted AES key and IV array to the end of data array
                 var oldLength = data.Length;
                 Array.Resize(ref data, oldLength + encryptedKeyAndIV.Length);
                 Array.Copy(encryptedKeyAndIV, 0, data, oldLength, encryptedKeyAndIV.Length);
@@ -177,9 +180,9 @@ namespace AudioEncryption
         }
 
         /// <summary>
-        /// Decrypts wav data using private key set in RsaManager static class. Returns true if successful otherwise false.
+        /// Decrypts wav data using private key set in RsaManager static class. Returns true if successful.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True if successful otherwise false</returns>
         public bool Decrypt()
         {
             if (Status == WavFileState.Decrypted || Status == WavFileState.Empty)
@@ -187,22 +190,48 @@ namespace AudioEncryption
 
             using (AesCryptoServiceProvider aes = new AesCryptoServiceProvider())
             {
-                var encryptedKeyAndIV = data.Skip(data.Length - 256).ToArray();
+                //Gets encrypted array containing key and IV for aes algorithm from the end of data array
+                var encryptedKeyAndIV = data.Skip(data.Length - RsaManager.EncryptedDataLength).ToArray();
                 var mergedKeyAndIV = RsaManager.Decrypt(encryptedKeyAndIV);
 
                 if (mergedKeyAndIV == null)
                     return false;
 
+                //Split merged array to both variables
                 aes.Key = mergedKeyAndIV.Take(32).ToArray();
                 aes.IV = mergedKeyAndIV.Skip(32).ToArray();
 
                 var decryptor = aes.CreateDecryptor();
 
-                data = data.Take(data.Length - 256).ToArray();
+                //Get only data without merged key and IV array from the end
+                data = data.Take(data.Length - RsaManager.EncryptedDataLength).ToArray();
+                //Decrypt data
                 data = decryptor.TransformFinalBlock(data, 0, data.Length);
             }
             Status = WavFileState.Decrypted;
             return true;
+        }
+
+        /// <summary>
+        /// Xor wav data with specified key
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns>True if successful otherwise false</returns>
+        public bool Xor(string key)
+        {
+            //Check if there is wav file loaded and if key have at least 1 character
+            if (key.Length >= 1 && data != null)
+            {
+                for (int i = 0; i < data.Length; i++)
+                {
+                    data[i] = (byte)(data[i] ^ key[i % key.Length]);
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

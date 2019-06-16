@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AudioEncryption"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="460" Width="800">
     <Grid>
         <DockPanel>
             <Button DockPanel.Dock="Top" Content="Pomoc" Width="80" HorizontalAlignment="Right" Margin="5" Click="Button_Click"/>
@@ -16,12 +17,13 @@
                     <TextBlock x:Name="StatusErrorTextBlock" Text="{Binding Path=StatusAdditionalInfo, Mode=OneWay}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5">
+                    <Button x:Name="XORButton" Content="XOR" Margin="10 0" Padding="5 2" Click="XORButton_Click"/>
                     <Button x:Name="EncryptButton" Content="Zaszyfruj" Margin="10 0" Padding="5 2" Click="EncryptButton_Click"/>
                     <Button x:Name="DecryptButton" Content="Odszyfruj" Margin="10 0" Padding="5 2" Click="DecryptButton_Click"/>
                     <Button x:Name="SaveAsButton" Content="Zapisz jako..." Margin="10 0" Padding="5 2" Click="SaveAsButton_Click"/>
                 </StackPanel>
             </StackPanel>
-            <Grid Margin="20 0 20 10">
+            <Grid Margin="20 0 20 0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"></ColumnDefinition>
                     <ColumnDefinition Width="2*"></ColumnDefinition>
@@ -44,7 +46,8 @@
                             <ColumnDefinition Width="2*"></ColumnDefinition>
                             <ColumnDefinition Width="2*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <TextBox x:Name="PrivateKeyTextBlock" Grid.Column="0" IsReadOnly="True" AcceptsReturn="True" Height="70" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Hidden"/>
+                        <TextBox x:Name="PrivateKeyTextBlock" Grid.Column="0" IsReadOnly="True" AcceptsReturn="True" Height="70" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Hidden" TextWrapping="Wrap"/>
+                        <Image x:Name="PrivateKeyLoadingImage" Visibility="Collapsed" gif:ImageBehavior.RepeatBehavior="Forever" gif:ImageBehavior.AnimatedSource="loading.gif" Grid.Column="0" Height="29" Width="77"/>
                         <Button x:Name="LoadPrivateKeyButton" Grid.Column="1" Content="Wczytaj" Click="LoadPrivateKeyButton_Click"/>
                         <Button x:Name="PrivateKeySaveAsButton" Grid.Column="2" Content="Zapisz" Click="PrivateKeySaveAsButton_Click"/>
                     </Grid>
@@ -55,7 +58,8 @@
                             <ColumnDefinition Width="2*"></ColumnDefinition>
                             <ColumnDefinition Width="2*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <TextBox x:Name="PublicKeyTextBlock" Grid.Column="0" IsReadOnly="True" AcceptsReturn="True" Height="70" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Hidden"/>
+                        <TextBox x:Name="PublicKeyTextBlock" Grid.Column="0" IsReadOnly="True" AcceptsReturn="True" Height="70" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Hidden" TextWrapping="Wrap"/>
+                        <Image x:Name="PublicKeyLoadingImage" Visibility="Collapsed" gif:ImageBehavior.RepeatBehavior="Forever" gif:ImageBehavior.AnimatedSource="loading.gif" Grid.Column="0" Height="29" Width="77"/>
                         <Button x:Name="LoadPublicKeyButton" Grid.Column="1" Content="Wczytaj" Click="LoadPublicKeyButton_Click"/>
                         <Button x:Name="PublicKeySaveAsButton" Grid.Column="2" Content="Zapisz" Click="PublicKeySaveAsButton_Click"/>
                     </Grid>
@@ -69,6 +73,14 @@
                         <TextBox Grid.Column="0" Text="{Binding Path=UniqueKeyFileNamePart, Mode=TwoWay}"/>
                         <TextBox Grid.Column="1" Text="{Binding Path=CommonKeyFileNamePart, Mode=OneWay}" IsReadOnly="True"/>
                         <Button x:Name="SaveBothKeysButton" Grid.Column="2" Content="Zapisz oba klucze" Click="SaveBothKeysButton_Click"/>
+                    </Grid>
+                    <Grid Margin="0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90"></ColumnDefinition>
+                            <ColumnDefinition Width="4*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Klucz do XOR: " />
+                        <TextBox x:Name="XORKeyTextBox" Grid.Column="1" Height="20"/>
                     </Grid>
                 </StackPanel>
 
